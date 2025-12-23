@@ -1,48 +1,50 @@
 import streamlit as st
+import numpy as np 
 import pandas as pd 
-import numpy as np
-import seaborn as sns 
-import matplotlib.pyplot as plt 
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import r2_score, mean_squared_error
 
-st.set_page_config(page_title="Student Performance App", layout= "wide")
-st.title("Student Performance Streamlit App")
-st.markdown("---")
+st.set_page_config(page_title = 'Student Performance App', layout = 'wide')
+
+st.title('Student Performance Streamlit App')
+st.markdown('---')
 
 st.header("Data Ingestion")
 
 @st.cache_data
+
 def load_data():
-    return pd.read_csv("C:\StudentPerformance_project\Data\Student_Performance.csv")
+    return pd.read_csv('C:\StudentPerformance_project\Data\Student_Performance.csv')
 
 df = load_data()
 
 st.dataframe(df.head())
-st.markdown("---")
+st.markdown('---')
 
 st.subheader("Descriptive Statistics")
-st.write(df.describe(include="all"))
+st.write(df.describe(include='all'))
 
 st.header("Exploratory Data Analysis")
 
-fig, axes = plt.subplots(2, 3, figsize=(16, 8))
+fig, axes = plt.subplots(2,3, figsize= (16,8))
 cols = df.columns
 
 for i, ax in enumerate(axes.flat):
-    sns.histplot(df[cols[i]], kde=True, ax=ax)
-    ax.set_title(cols[i])
+     sns.histplot(df[cols[i]], kde=True, ax=ax)
+     ax.set_title(cols[i])
 
 plt.tight_layout()
 st.pyplot(fig)
 
-st.subheader("Correlation Heatmap")
+st.subheader("Correaltion Heatmap")
 
 numeric_df = df.select_dtypes(include=[np.number])
 
-fig2, ax2 = plt.subplots(figsize=(8, 6))
+fig2, ax2 = plt.subplots(figsize=(8,6))
 sns.heatmap(numeric_df.corr(), annot=True, cmap="coolwarm", ax=ax2)
 st.pyplot(fig2)
 
@@ -57,7 +59,8 @@ if "Extracurricular Activities" in df_model.columns:
         {"Yes": 1, "No": 0}
     )
 
-df_model = df_model.apply(pd.to_numeric, errors="coerce")
+
+df_model = df_model.apply(pd.to_numeric, errors='coerce')
 
 df_model = df_model.dropna()
 
